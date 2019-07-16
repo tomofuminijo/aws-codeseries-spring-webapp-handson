@@ -1,4 +1,4 @@
-# AWS Code シリーズを利用してJava Spring Boot Web Appをデプロイするためのハンズオン
+# AWS Code シリーズを利用してJava Spring Boot アプリケーションをEC2に自動デプロイするハンズオン
 
 Java Spring Boot Web App を利用して、CodeCommit、CodeBuild、CodeDeploy、CodePipeline の利用方法の概要を学びます。
 
