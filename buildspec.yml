@@ -1,0 +1,25 @@
+version: 0.2
+ 
+phases:
+  install:
+    runtime-versions:
+      java: openjdk8
+  pre_build:
+    commands:
+      - echo Nothing to do in this phase
+  build:
+    commands:
+      - echo Build started on `date`
+      - mvn test package
+  post_build:
+    commands:
+      - echo Nothing to do in this phase
+artifacts:
+  files:
+    - target/my-greeting-web-0.1.0.jar
+    - appspec.yml
+    - deploy/*
+  discard-paths: yes
+cache:
+  paths:
+    - '/root/.m2/**/*'

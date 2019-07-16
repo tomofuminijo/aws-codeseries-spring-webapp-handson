@@ -1,0 +1,6 @@
+amazon:
+  dynamodb:
+    local: false
+    tableprefix: prod-
+  credential:
+    profile: default

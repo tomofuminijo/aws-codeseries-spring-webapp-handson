@@ -1,0 +1,8 @@
+amazon:
+  dynamodb:
+    local: false
+    endpoint: http://localhost:8000
+    region: us-east-1
+    tableprefix:
+  credential:
+    profile: default

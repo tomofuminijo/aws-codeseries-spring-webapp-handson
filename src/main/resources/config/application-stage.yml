@@ -1,0 +1,6 @@
+amazon:
+  dynamodb:
+    local: false
+    tableprefix: stage-
+  credential:
+    profile: default
