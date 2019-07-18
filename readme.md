@@ -233,10 +233,10 @@ Build のためのサーバなどは管理不要です。
 ## CodeDeploy の構成
 
 
-1. CodeDeploy 用のサービスロールを作成します。
+1. IAM ロールにて、CodeDeploy 用のサービスロールを作成します。
     - 対象サービス：CodeDeploy、ユースケース：CodeDeploy
     - 以下のポリシーを関連付けます(デフォルトで設定済み)
-    - AWSCodeDeployRole
+      - AWSCodeDeployRole
 
 2. マネージメントコンソールでCodeDeploy サービス画面を表示します。
 
