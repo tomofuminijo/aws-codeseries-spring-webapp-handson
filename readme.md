@@ -4,7 +4,7 @@ Java Spring Boot Web App を利用して、CodeCommit、CodeBuild、CodeDeploy�
 
 # 実行環境
 
-このハンズオンは、AWS Cloud9 上で実行する前提できししていますが、どの環境でも動かせます。（OpenJDK 8 およびMaven があれば良いです。）
+このハンズオンは、AWS Cloud9 上で実行する前提で記載していますが、どの環境でも動かせます。（OpenJDK 8 およびMaven があれば良いです。）
 
 # 事前準備
 
@@ -281,7 +281,7 @@ Build のためのサーバなどは管理不要です。
 
 # Step7: CodePipeline の構成
 
-ここまででCodeCommit/CodeBuild/CodeDeploy の構成ができましたが、まだ各サービスが単体で道才している状態です。
+ここまででCodeCommit/CodeBuild/CodeDeploy の構成ができましたが、まだ各サービスが単体で動いている状態です。
 CodeCommit にコードがPush されたら、CodeBuild/CodeDeploy まで自動的に実行されるようにCodePiplelineを構成します。
 
 1. マネージメントコンソールでCodePipeline を選択します。
