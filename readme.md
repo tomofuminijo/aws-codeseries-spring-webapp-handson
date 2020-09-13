@@ -23,9 +23,9 @@ Java Spring Boot Web App を利用して、CodeCommit、CodeBuild、CodeDeploy�
 まず、Cloud9 上でターミナルウィンドウを開き、以下のコマンドを実行します。
 
 ```
-wget https://d2znqt9b1bc64u.cloudfront.net/java-1.8.0-amazon-corretto-devel-1.8.0_202.b08-2.x86_64.rpm
+wget https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.rpm
 
-sudo yum install -y java-1.8.0-amazon-corretto-devel-1.8.0_202.b08-2.x86_64.rpm
+sudo rpm -ihv /home/ec2-user/environment/amazon-corretto-8-x64-linux-jdk.rpm
 ```
 
 JAVA_HOME 環境変数を設定しておきます。
