@@ -170,7 +170,7 @@ Build のためのサーバなどは管理不要です。
       - 環境イメージ： マネージド型イメージ (デフォルト)
       - オペレーティングシステム: Ubuntu
       - ランタイム: Standard
-      - イメージ： aws/codebuild/standard:2.0
+      - イメージ： aws/codebuild/standard:5.0
     - アーティファクト
       - タイプ： Amazon S3
       - バケット名: 先程作成したバケットを選択します
