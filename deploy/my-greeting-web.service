@@ -3,7 +3,7 @@ Description = my greeting web app
 After = syslog.target
 
 [Service]
-ExecStart = /var/my-greeting-web/my-greeting-web-0.1.0.jar
+ExecStart = /var/my-greeting-web/my-greeting-web-1.0.0.jar
 Restart = always
 Type = simple
 User = root
