@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: ./my-greeting-web-0.1.0.jar
+  - source: ./my-greeting-web-1.0.jar
     destination: /var/my-greeting-web/
   - source: ./my-greeting-web.service
     destination: /etc/systemd/system/

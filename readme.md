@@ -4,7 +4,7 @@ Java Spring Boot Web App を利用して、CodeCommit、CodeBuild、CodeDeploy�
 
 # 実行環境
 
-このハンズオンは、AWS Cloud9 上で実行する前提で記載していますが、どの環境でも動かせます。（OpenJDK 8 およびMaven があれば良いです。）
+このハンズオンは、AWS Cloud9 上で実行する前提で記載していますが、どの環境でも動かせます。（OpenJDK 11 およびMaven があれば良いです。）
 
 # 事前準備
 
@@ -16,24 +16,16 @@ Java Spring Boot Web App を利用して、CodeCommit、CodeBuild、CodeDeploy�
     - AWSCodeDeployFullAccess
     - AWSCloud9Administrator
 - Cloud9 の起動
-  - 適当なリージョンでCloud9 を起動します。
+  - 東京リージョンにて、Platform を"Amazon Linux 2" を指定してCloud9 を起動します。インスタンスタイプは、"t3.small" 以上を推奨します。
 
-# Step1: JDK 8 のインストール
-ここでは、[Amazon Corretto (Java8)](https://aws.amazon.com/jp/corretto/)　をインストールします。   
+# Step1: JDK 11 のインストール
+ここでは、[Amazon Corretto](https://aws.amazon.com/jp/corretto/)　をインストールします。   
 まず、Cloud9 上でターミナルウィンドウを開き、以下のコマンドを実行します。
 
 ```
-wget https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.rpm
+wget https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.rpm
 
-sudo rpm -ihv /home/ec2-user/environment/amazon-corretto-8-x64-linux-jdk.rpm
-```
-
-JAVA_HOME 環境変数を設定しておきます。
-
-```
-echo "export JAVA_HOME=/usr/lib/jvm/java-1.8.0-amazon-corretto/" >> ~/.bash_profile
-
-source ~/.bash_profile
+sudo rpm -ihv /home/ec2-user/environment/amazon-corretto-11-x64-linux-jdk.rpm
 ```
 
 # Step2: Maven のインストール
@@ -65,7 +57,7 @@ sudo yum install -y apache-maven
     ```
   - Java の実行
     ```
-    java -jar target/my-greeting-web-0.1.0.jar --spring.profiles.active=dev
+    java -jar target/my-greeting-web-1.0.0.jar --spring.profiles.active=dev
     ```
 
 - ブラウザからアクセス   
@@ -84,16 +76,23 @@ sudo yum install -y apache-maven
     1. "Language" の入力欄に "ja" や"fr"、"ko" などと入力して"Greeting" ボタンを押すと、それぞれの言語にHello が表示されます。データはDynamoDB　から取得されます。
     
     1. 以下のコマンドを叩くことで、DynamoDB ローカル上にテーブルが作成されていることを確認できます。
-      ```
-      aws dynamodb list-tables --endpoint-url http://localhost:8000 --region localtest
-      ```
+    
+        ```
+        aws dynamodb list-tables --endpoint-url http://localhost:8000 --region localtest
+        ```
+
+    1. 動作確認が終わったらすべてのプロセスを終了します。
+
+
 
 # Step4: CodeCommit
 
 1. リポジトリの作成
 
+    ターミナルで以下のコマンドを実行し、CodeCommit 上にリポジトリを作成します。
+
     ```
-    aws codecommit create-repository --repository-name MyHandsOn --repository-description "My Handson repository" 
+    aws codecommit create-repository --repository-name MyCodeSeriesHandsOn --repository-description "My Handson repository" 
     ```
     
     以下のような情報が返却されます。
@@ -101,14 +100,14 @@ sudo yum install -y apache-maven
     ```
     {
       "repositoryMetadata": {
-          "repositoryName": "MyHandsOn", 
-          "cloneUrlSsh": "ssh://git-codecommit.your_region_code.amazonaws.com/v1/repos/MyHandsOn", 
+          "repositoryName": "MyCodeSeriesHandsOn", 
+          "cloneUrlSsh": "ssh://git-codecommit.ap-northeast-1.amazonaws.com/v1/repos/MyCodeSeriesHandsOn", 
           "lastModifiedDate": 1563268366.672, 
           "repositoryDescription": "My Handson repository", 
-          "cloneUrlHttp": "https://git-codecommit.your_region_code.amazonaws.com/v1/repos/MyHandsOn", 
+          "cloneUrlHttp": "https://git-codecommit.ap-northeast-1.amazonaws.com/v1/repos/MyCodeSeriesHandsOn", 
           "creationDate": 1563268366.672, 
           "repositoryId": "xxxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx", 
-          "Arn": "arn:aws:codecommit:your_region_code:your_account_id:MyHandsOn", 
+          "Arn": "arn:aws:codecommit:ap-northeast-1:your_account_id:MyCodeSeriesHandsOn", 
           "accountId": "your_account_id"
       }
     }
@@ -116,32 +115,29 @@ sudo yum install -y apache-maven
     
     上記の"cloneUrlHttp" の内容をコピーしておきます。
 
-1. CodeCommit 認証情報ヘルパーの設定
+1. (Option) git-remote-codecommit のインストール
 
-    以下のコマンドを実行します。
+    Cloud9 環境以外で実施している場合は、以下のURL を参考にgit-remote-codecommit をインストールしてください。
     
-    ```
-    git config --global credential.helper '!aws codecommit credential-helper $@'
-    git config --global credential.UseHttpPath true
-    ```
-    
-    - 参考URL: [AWS CLI 認証情報ヘルパーを使用する Linux, macOS, or Unix での AWS CodeCommit リポジトリへの HTTPS 接続のセットアップステップ - AWS CodeCommit](https://docs.aws.amazon.com/ja_jp/codecommit/latest/userguide/setting-up-https-unixes.html)
+    - 参考URL: [git-remote-codecommit を使用して AWS CodeCommit への HTTPS 接続をセットアップする手順 - AWS CodeCommit](https://docs.aws.amazon.com/ja_jp/codecommit/latest/userguide/setting-up-git-remote-codecommit.html)
 
 1. CodeCommit リポジトリへのpush
 
     以下のコマンドを実行します。
     
     ```
-    git init
     git add .
     git commit -m "My First Commit"
     git remote remove origin
-    git remote add origin https://git-codecommit.your_region_code.amazonaws.com/v1/repos/MyHandsOn
+    git remote add origin codecommit::ap-northeast-1://MyCodeSeriesHandsOn
     git push origin master
     ```
 
 1. CodeCommit リポジトリに確認
     - マネジメントコンソールにアクセスしてCodeCommit リポジトリの内容を確認してみましょう
+        ```
+        https://ap-northeast-1.console.aws.amazon.com/codesuite/codecommit/repositories/MyCodeSeriesHandsOn/browse?region=ap-northeast-1
+        ```
 
 
 # Step5: CodeBuild
@@ -165,7 +161,7 @@ Build のためのサーバなどは管理不要です。
     - プロジェクト名: MyCodeBuild
     - 送信元
       - ソースプロバイダ： AWS CodeCommit (デフォルト)
-      - リポジトリ： MyHandsOn
+      - リポジトリ： MyCodeSeriesHandsOn
     - 環境
       - 環境イメージ： マネージド型イメージ (デフォルト)
       - オペレーティングシステム: Ubuntu
@@ -174,12 +170,12 @@ Build のためのサーバなどは管理不要です。
     - アーティファクト
       - タイプ： Amazon S3
       - バケット名: 先程作成したバケットを選択します
-      - セマンティックバージョニングの有効化: チェックを入れる
       - アーティファクトのパッケージ化: Zip にチェックを入れる
       - 追加設定
-        - キャッシュタイプ: ローカル
-        - SourceCache: チェックオン
-        - CustomCache: チェックオン
+        - キャッシュタイプ: Amazon S3
+        - キャッシュバケット: 先程作成したバケットを選択します
+        - キャッシュパスのプレフィックス - オプショナル: cache
+        - キャッシュのライフサイクル (日) - オプショナル: "1" を入力した後に、"+ 有効期限を追加する" ボタンをクリックする -> S3 上に自動的にライフサイクルが設定される
 
 5. "ビルドプロジェクトを作成する" ボタンをクリックします。
 
@@ -189,7 +185,9 @@ Build のためのサーバなどは管理不要です。
 
 8. ビルド処理は初回は５分ほど時間がかかります。
 
-9. ビルド処理が正常に終了したら、指定したS3 バケットにアーティファクトが出力されていることを確認します。
+9. ビルド中にCodeBuild の画面にて、ビルドログなどでビルドの状況を確認できます。
+
+10. ビルド処理が正常に終了したら、指定したS3 バケットにアーティファクトが出力されていることを確認します。
   - MyCodeBuild が出力されていることを確認します
 
 
@@ -199,14 +197,16 @@ Build のためのサーバなどは管理不要です。
 
 ## EC2 用のIAM ロールの作成
 
-  - 以下のポリシーをアタッチしたEC2 用のIAMロールを作成します。
+  - 以下のAWS 管理ポリシーをアタッチしたEC2 用のIAMロールを作成します。
     - AmazonEC2RoleforAWSCodeDeploy
     - AmazonDynamoDBFullAccess
+    - AmazonSSMManagedInstanceCore
 
 ## EC2 の起動
 
 1. EC2 インスタンスを起動します。以下の内容を指定してください。
     - AMI: Amazon Linux 2
+    - インスタンスタイプ: t2.micro
     - ネットワーク： Default VPC を利用
     - IAM ロール: 先ほど作成したIAMロール
     - ユーザデータは以下を指定する
@@ -214,18 +214,10 @@ Build のためのサーバなどは管理不要です。
         ```
         #!/bin/bash
         yum -y update
-        yum install -y ruby jq
-         
-        # install CodeDeploy Agent
-        REGION=$(curl -s 169.254.169.254/latest/dynamic/instance-identity/document | jq -r ".region")
-        cd /home/ec2-user
-        wget https://aws-codedeploy-${REGION}.s3.amazonaws.com/latest/install
-        chmod +x ./install
-        ./install auto
         
         # install jdk
-        wget https://d3pxv6yz143wms.cloudfront.net/8.212.04.2/java-1.8.0-amazon-corretto-devel-1.8.0_212.b04-2.x86_64.rpm
-        sudo yum install -y java-1.8.0-amazon-corretto-devel-1.8.0_212.b04-2.x86_64.rpm
+        wget https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.rpm
+        sudo rpm -ihv /home/ec2-user/environment/amazon-corretto-11-x64-linux-jdk.rpm
         ```
     - タグに、Name/MyHandsOnTarget を設定しておく
     - セキュリティグループは 8080 ポートを開けておく
@@ -241,7 +233,7 @@ Build のためのサーバなどは管理不要です。
 
 2. マネージメントコンソールでCodeDeploy サービス画面を表示します。
 
-3. アプリケーション -> "アプリケーションの作成" ボタンをクリックします。
+3. ナビゲーションペインにて、アプリケーション をクリックし、右側の画面にて "アプリケーションの作成" ボタンをクリックします。
 
 4. 以下を入力します。
     - アプリケーション名: myhanodson-app
