@@ -130,7 +130,7 @@ sudo yum install -y apache-maven
     git commit -m "My First Commit"
     git remote remove origin
     git remote add origin codecommit::ap-northeast-1://MyCodeSeriesHandsOn
-    git push origin master
+    git push origin main
     ```
 
 1. CodeCommit リポジトリに確認
@@ -289,7 +289,7 @@ CodeCommit にコードがPush されたら、CodeBuild/CodeDeploy まで自動�
 5. 「ソースステージを追加する」 画面にて、以下を入力します。
     - ソースプロバイダー: CodeCommit
     - リポジトリ名: MyHandsOn
-    - ブランチ名: master
+    - ブランチ名: main
 
 6. "次に" ボタンをクリックします。
 
@@ -321,7 +321,7 @@ CodeCommit にgit push してPipeline が自動的に実行されることを確
     ```
     git add .
     git commit -m "ver 2.0.0"
-    git push origin master
+    git push origin main
     ```
 
 4. マネジメントコンソールのCodePipeline サービス画面にて、パイプラインが動作していることを確認します。
