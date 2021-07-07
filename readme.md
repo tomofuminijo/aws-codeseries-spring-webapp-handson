@@ -217,7 +217,7 @@ Build のためのサーバなどは管理不要です。
         
         # install jdk
         wget https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.rpm
-        sudo rpm -ihv /home/ec2-user/environment/amazon-corretto-11-x64-linux-jdk.rpm
+        sudo rpm -ihv amazon-corretto-11-x64-linux-jdk.rpm
         ```
     - タグに、Name/MyHandsOnTarget を設定しておく
     - セキュリティグループは 8080 ポートを開けておく
